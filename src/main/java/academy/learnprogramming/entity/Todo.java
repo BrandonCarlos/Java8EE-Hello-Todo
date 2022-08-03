@@ -5,11 +5,16 @@
 package academy.learnprogramming.entity;
 
 import java.time.LocalDate;
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity //Create persistence unit
 public class Todo {
@@ -18,7 +23,14 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.AUTO)//id vai aumentar de 1 em 1
     private Long id;
 
+    //Abaixo temos 2 Annotation validations
+    @NotEmpty(message = "Task must be set")//faz com que este campo não permite valor vázio
+    @Size(min = 10, message = "Task should not be less than characters")//no minimo usuário precisa colocar 10 caracteres
     private String task;
+    
+    @NotNull(message = "Due must be set")//Ou seja não podemos esquecer de colocar o "dueDate"
+    @FutureOrPresent(message = "Dude must be in the present or future")
+    @JsonbDateFormat(value = "yyyy-MM-dd")//usuário vai enviar o dueDate neste formato JSON = "yyyy-MM-dd"
     private LocalDate dueDate;
     private boolean isCompleted;
     private LocalDate dateCompleted;
